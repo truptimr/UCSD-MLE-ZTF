@@ -6,7 +6,7 @@ The notebooks do the following
 1. Develop Classifiers for variable star types using these features. 
 1. Compare Classifiers for different variable star types and different classifier types
 
-#Setup
+# Setup
 1. Download equal number of light curves for all variable stars by running notebook "Download_Processed_LCs.ipynb". The downloaded data is stored in an SQLite database
 1. Extract features from the downloaded light curves by running "FeaturesFromXiaoDianLC.ipynb". The features are save in a .csv files
 1. Train and compare classifiers by running notebook "OneVSallClassifier-comparison.ipynb"
