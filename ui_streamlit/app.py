@@ -54,6 +54,7 @@ Zwicky Transient Facility
 
 Code  
 
+1. [Pandas](https://pandas.pydata.org/)  
 1. [sklearn](https://scikit-learn.org/stable/)  
 1. [streamlit](https://streamlit.io/)  
 1. [Git repo](https://github.com/truptimr/UCSD-MLE-ZTF)  
@@ -126,12 +127,12 @@ st.sidebar.header('Light Source Datasets')
 st.sidebar.text("""Uncheck all boxes before 
 switching between datasets""")
 
-if st.sidebar.checkbox('ZTF Dataset'):
+if st.sidebar.checkbox('ZTF DR2 Dataset'):
 	st.sidebar.text('''Input source location RA and 
 DEC with 10 arcsec accuracy
 ''' )
 	RA = st.sidebar.number_input('Right Acsecion (Degree)', min_value=0.0, max_value=360.0, value=72.0, step=0.01)
-	Dec = st.sidebar.number_input('Declination Acsecion (Degree)', min_value=0.0, max_value=90.0, value = 24.00, step=0.001)
+	Dec = st.sidebar.number_input('Declination Acsecion (Degree)', min_value=0.0, max_value=90.0, value = 23.00, step=0.01)
 	if st.sidebar.checkbox('Query Location'):
 		lc1, lc_complete1 = cb.query_lightcurve_DR(RA, Dec)
 		if lc1.empty:

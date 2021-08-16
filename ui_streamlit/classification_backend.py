@@ -55,7 +55,8 @@ def query_lightcurve_DR(RA, Dec):
         lc.columns=['RAdeg', 'DEdeg', 'HJD', 'mag', 'e_mag', 'band']
         lc.replace({'zg':'g'},inplace = True)
         lc.replace({'zr':'r'},inplace = True)
-        lc.iloc['HJD',:] = lc.iloc['HJD',:]-2.4e6
+        val = lc.loc[:,'HJD']-2.4e6
+        lc.loc[:,'HJD'] = val
     except:
         lc_complete = pd.DataFrame()
         lc = pd.DataFrame()
