@@ -289,7 +289,7 @@ def prediction_probabilty(features):
         for variable_type in label:
             print(variable_type)
             name = 'XGBoost'
-            filename = 'pickles/'+ name+'_'+variable_type+'.pkl'
+            filename = '../pickles/'+ name+'_'+variable_type+'.pkl'
             clf = pickle.load(open(filename, 'rb'))
             predict_proba = clf.predict_proba(features)
             prob[variable_type] = round(predict_proba[0,0],2)
