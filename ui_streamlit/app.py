@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import classification_backend as cb
 import sqlalchemy as db
+import numpy as np
 
 
 web_text = """
@@ -131,15 +132,19 @@ if st.sidebar.checkbox('ZTF DR2 Dataset'):
 	st.sidebar.text('''Input source location RA and 
 DEC with 10 arcsec accuracy
 ''' )
-	RA = st.sidebar.number_input('Right Acsecion (Degree)', min_value=0.0, max_value=360.0, value=72.0, step=0.01)
-	Dec = st.sidebar.number_input('Declination Acsecion (Degree)', min_value=0.0, max_value=90.0, value = 23.00, step=0.01)
+	RA = st.sidebar.number_input('Right Ascension (Degree)', min_value=0.0, max_value=360.0, value=72.0, step=0.01)
+	Dec = st.sidebar.number_input('Declination (Degree)', min_value=0.0, max_value=90.0, value = 23.00, step=0.01)
 	if st.sidebar.checkbox('Query Location'):
 		lc1, lc_complete1 = cb.query_lightcurve_DR(RA, Dec)
 		if lc1.empty:
 			st.sidebar.text("No data available")
 			NA = True
 		else:
+			RA = np.round(lc1.RAdeg[0],3)
+			Dec = np.round(lc1.DEdeg[0],3)
+			ra_dec_str = "RA {} Dec {}".format(RA,Dec)
 			st.sidebar.text("Data is available")
+			st.sidebar.text(ra_dec_str)
 			cb.plot_lc(lc1)
 			NA = False
 			if st.sidebar.checkbox('Save to Database  (Optional)'):
@@ -164,7 +169,11 @@ SourceID range = 1 to 781602
 			st.sidebar.text("No data available")
 			NA = True
 		else:
+			RA = np.round(lc2.RAdeg[0],3)
+			Dec = np.round(lc2.DEdeg[0],3)
+			ra_dec_str = "RA {} Dec {}".format(RA,Dec)
 			st.sidebar.text("Data is available")
+			st.sidebar.text(ra_dec_str)
 			cb.plot_lc(lc2)
 			NA = False
 			if st.sidebar.checkbox('Save to Database (Optional)'):
