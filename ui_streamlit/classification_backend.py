@@ -91,13 +91,20 @@ def plot_lc(lc):
     st.pyplot(fig)
 
 
-def weighted_mean(mag,mag_err):
-    mag2 = (mag_err*mag_err) # mag err square
-    mag2_inv = 1/mag2.values; # take inverse of the values
-    w = pd.Series(mag2_inv) # covert it back to s series
-    sw = w.sum() # sum of weights
-    wmag = mag*w # multiply magnitude with weights
-    wmean = wmag.sum()/sw # weighted mean
+# def weighted_mean(mag,mag_err):
+#     mag2 = (mag_err*mag_err) # mag err square
+#     mag2_inv = 1/mag2.values; # take inverse of the values
+#     w = pd.Series(mag2_inv) # covert it back to s series
+#     sw = w.sum() # sum of weights
+#     wmag = mag*w # multiply magnitude with weights
+#     wmean = wmag.sum()/sw # weighted mean
+#     return wmean
+
+def weighted_mean(mag,e_mag):
+    w = 1/(e_mag*e_mag)
+    sw = np.sum(w)
+    wmag = w*mag
+    wmean = np.sum(wmag)/sw
     return wmean
 
 
@@ -154,7 +161,7 @@ def calculate_features(lc):
         dfr = lc.loc[lc["band"] == "r"]
         if len(dfg) > 1:
             N = len(dfg)
-            wmean_temp = weighted_mean(dfg.mag,dfg.e_mag)
+            wmean_temp = weighted_mean(dfg.mag.values,dfg.e_mag.values)
             K_temp, J_temp =  welsh_staton(dfg.mag, wmean_temp )
             g_mean.append(dfg.mag.mean())
             g_wmean.append(wmean_temp) 
@@ -185,7 +192,7 @@ def calculate_features(lc):
                 
         if len(dfr) >1:
             N = len(dfr)
-            wmean_temp = weighted_mean(dfr.mag,dfr.e_mag)
+            wmean_temp = weighted_mean(dfr.mag.values,dfr.e_mag.values)
             K_temp, J_temp =  welsh_staton(dfr.mag, wmean_temp )
             r_mean.append(dfr.mag.mean())
             r_wmean.append(wmean_temp) 
