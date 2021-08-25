@@ -73,18 +73,19 @@ def plot_lc(lc):
 
     fig, axs = plt.subplots(nrows=1, ncols=2, sharex=True)
     ax = axs[0]
-    ax.errorbar(data1['HJD'],data1['mag'],yerr = data1['e_mag'],fmt='r.')
-    ax.invert_yaxis() # smaller magnitude means brighter stars, so invert the axis
-    ax.set_xlabel ('time in HJD')
-    ax.set_ylabel('magnitude')
-    ax.set_title('Red Filter')
-
-    ax = axs[1]
     ax.errorbar(data2['HJD'],data2['mag'],yerr = data2['e_mag'],fmt='g.')
     ax.invert_yaxis() # smaller magnitude means brighter stars, so invert the axis
     ax.set_xlabel('time in HJD')
     ax.set_ylabel('magnitude')
-    ax.set_title('Green filter')
+    ax.set_title('Green Filter (g band)')
+
+    ax = axs[1]
+    ax.errorbar(data1['HJD'],data1['mag'],yerr = data1['e_mag'],fmt='r.')
+    ax.invert_yaxis() # smaller magnitude means brighter stars, so invert the axis
+    ax.set_xlabel ('time in HJD')
+    ax.set_ylabel('magnitude')
+    ax.set_title('Red Filter (r filter)')
+    
 
     fig.tight_layout(pad=3.0)
     fig.suptitle('Measured Light Curve', fontsize=16)
@@ -303,3 +304,17 @@ def prediction_probabilty(features):
     #         prob[variable_type] = clf.predict_proba(features)
         prob_pd['Probability']=prob.values()
     return prob_pd
+
+
+@st.cache
+def true_label(ID):
+    """
+    Find true star type in the labeled data set
+    """
+    ## open label data table
+    widths = (8,7,4,13,43)
+    header_pd = pd.read_fwf('../databases/Labeled_data.txt', widths = widths,skiprows=7, nrows=27)
+    labeled_data = pd.read_csv('../databases/Labeled_data.txt', header=None, delim_whitespace=True, skiprows=36) # extract data
+    labeled_data.columns = header_pd.iloc[:,3]
+    true_label = labeled_data.loc[labeled_data['SourceID']==ID,'Type']
+    return true_label.values[0]

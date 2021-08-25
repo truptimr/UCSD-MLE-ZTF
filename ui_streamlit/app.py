@@ -110,7 +110,7 @@ def prediction(lc, NA):
 	if max_prob<=0.5 or NA:
 		st.markdown('**The lightcurve does not belog to any of the 9 periodic variables types**')
 	if st.checkbox('Variable Type Explanation'):
-		st.markdown(variable_type_explanation)
+		st.markdown(variable_type_explanation)	
 
 ### The Webpage ####
 
@@ -128,7 +128,7 @@ st.sidebar.header('Light Source Datasets')
 st.sidebar.text("""Uncheck all boxes before 
 switching between datasets""")
 
-if st.sidebar.checkbox('ZTF DR2 Dataset'):
+if st.sidebar.checkbox('ZTF DR2 Dataset (Unlabeled)'):
 	st.sidebar.text('''Input source location RA and 
 DEC with 10 arcsec accuracy
 ''' )
@@ -157,7 +157,7 @@ DEC with 10 arcsec accuracy
 		
 
 
-if st.sidebar.checkbox('Xiaodian Chen Dataset'):
+if st.sidebar.checkbox('Xiaodian Chen Dataset (Labeled)'):
 	st.sidebar.text('''Use Source ID to query dataset
 from http://variables.cn:88/
 SourceID range = 1 to 781602
@@ -174,6 +174,9 @@ SourceID range = 1 to 781602
 			ra_dec_str = "RA {} Dec {}".format(RA,Dec)
 			st.sidebar.text("Data is available")
 			st.sidebar.text(ra_dec_str)
+			true_label = cb.true_label(ID)
+			true_label_str = "The true star type is " + true_label
+			st.sidebar.markdown(true_label_str)
 			cb.plot_lc(lc2)
 			NA = False
 			if st.sidebar.checkbox('Save to Database (Optional)'):
@@ -181,9 +184,9 @@ SourceID range = 1 to 781602
 				lc2.to_sql(index, sqlite_connection, if_exists = 'replace')
 	if st.sidebar.checkbox('Predict') and ('lc2' in locals()):
 		prediction(lc2, NA)
-
-
 		
+
+	
 
 
 
